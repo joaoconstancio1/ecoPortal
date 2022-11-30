@@ -3,6 +3,7 @@ import 'package:coolmovies/movie_model.dart';
 import 'package:coolmovies/review_model.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:collection/collection.dart';
 
 class DetailsPage extends StatefulWidget {
   DetailsPage({super.key, this.movie});
@@ -27,6 +28,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     var data = widget.movie;
+    var reviewsData = review?.allMovieReviews?.nodes;
     return Scaffold(
       backgroundColor: Colors.grey[600],
       appBar: CustomAppBar(title: data?.title ?? ''),
@@ -63,12 +65,12 @@ class _DetailsPageState extends State<DetailsPage> {
             Positioned.fill(
               top: 300,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Text(
                         data?.title ?? 'Movie title',
                         style: const TextStyle(
@@ -78,18 +80,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        '',
-                        style: const TextStyle(
-                          color: Colors.white60,
-                          fontSize: 14,
-                          letterSpacing: 0.8,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
+                      padding: const EdgeInsets.only(top: 40),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -111,7 +102,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 width: 10,
                               ),
                               Text(
-                                '/ 10',
+                                '${_averageRating()} / 5',
                                 style: const TextStyle(
                                   color: Colors.orangeAccent,
                                   fontSize: 16,
@@ -125,11 +116,49 @@ class _DetailsPageState extends State<DetailsPage> {
                   ],
                 ),
               ),
-            )
+            ),
+            // Positioned(
+            //   top: 450,
+            //   child: ListView.builder(
+            //     padding: EdgeInsets.all(10),
+            //     itemCount: reviewsData?.length,
+            //     itemBuilder: (context, index) {
+            //       return Card(
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(10.0),
+            //         ),
+            //         elevation: 8,
+            //         child: Container(
+            //             padding: EdgeInsets.all(10),
+            //             child: Column(
+            //               children: [
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                   children: [
+            //                     Text(reviewsData?[index].title ?? 'title'),
+            //                     Text(reviewsData?[index].rating.toString() ??
+            //                         'title')
+            //                   ],
+            //                 ),
+            //                 Text(reviewsData?[index].title ?? 'title'),
+            //               ],
+            //             )),
+            //       );
+            //     },
+            //   ),
+            // )
           ],
         ),
       ),
     );
+  }
+
+  double? _averageRating() {
+    var reviews = review?.allMovieReviews?.nodes;
+    final average =
+        reviews?.map((e) => double.parse(e.rating.toString())).toList();
+    final averageRating = average?.average;
+    return averageRating;
   }
 
   void _getReviews() async {

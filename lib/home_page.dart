@@ -7,40 +7,27 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.movies});
+
+  final Movie? movies;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  Movie? movies;
-  bool isLoading = true;
-
-  @override
-  initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      _fetchData();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var item = movies?.allMovies?.nodes;
+    var item = widget.movies?.allMovies?.nodes;
     return Scaffold(
         backgroundColor: Colors.grey[600],
         appBar: CustomAppBar(title: 'Cool Movies'),
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemCount: item?.length,
-                itemBuilder: (context, index) {
-                  return _buildItem(item, index);
-                },
-              ));
+        body: ListView.builder(
+          itemCount: item?.length,
+          itemBuilder: (context, index) {
+            return _buildItem(item, index);
+          },
+        ));
   }
 
   _buildItem(List<MovieNodes>? movieList, int index) {
@@ -110,43 +97,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  void _fetchData() async {
-    var client = GraphQLProvider.of(context).value;
-
-    final QueryResult result = await client.query(QueryOptions(
-      document: gql(r"""
-          query AllMovies {
-            allMovies {
-              nodes {
-                id
-                imgUrl
-                movieDirectorId
-                userCreatorId
-                title
-                releaseDate
-                nodeId
-                userByUserCreatorId {
-                  id
-                  name
-                  nodeId
-                }
-              }
-            }
-          }
-        """),
-    ));
-
-    if (result.hasException) {
-      print(result.exception.toString());
-    }
-
-    if (result.data != null) {
-      movies = Movie.fromJson(result.data!);
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 }
