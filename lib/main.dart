@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:coolmovies/home_page.dart';
 import 'package:coolmovies/movie_model.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Coolmovies'),
+      home: const HomePage(),
     );
   }
 }
