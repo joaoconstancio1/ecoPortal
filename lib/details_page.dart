@@ -6,8 +6,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:collection/collection.dart';
 
 class DetailsPage extends StatefulWidget {
-  DetailsPage({super.key, this.movie});
-  MovieNodes? movie;
+  const DetailsPage({super.key, this.movie});
+  final MovieNodes? movie;
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -106,10 +106,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 ],
               ),
             ),
-            ListView.builder(
+            ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              },
               shrinkWrap: true,
               padding: const EdgeInsets.all(10),
-              itemCount: reviewsData?.length,
+              itemCount: reviewsData?.length ?? 0,
               itemBuilder: (context, index) {
                 return Card(
                   shape: RoundedRectangleBorder(
@@ -117,7 +120,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   elevation: 8,
                   child: Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
