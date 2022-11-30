@@ -42,29 +42,38 @@ class AllMovieReviews {
 }
 
 class Nodes {
+  String? userReviewerId;
+  String? title;
+  int? rating;
   String? body;
   String? id;
   String? movieId;
-  int? rating;
-  String? title;
 
-  Nodes({this.body, this.id, this.movieId, this.rating, this.title});
+  Nodes(
+      {this.userReviewerId,
+      this.title,
+      this.rating,
+      this.body,
+      this.id,
+      this.movieId});
 
   Nodes.fromJson(Map<String, dynamic> json) {
+    userReviewerId = json['userReviewerId'];
+    title = json['title'];
+    rating = json['rating'];
     body = json['body'];
     id = json['id'];
     movieId = json['movieId'];
-    rating = json['rating'];
-    title = json['title'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userReviewerId'] = this.userReviewerId;
+    data['title'] = this.title;
+    data['rating'] = this.rating;
     data['body'] = this.body;
     data['id'] = this.id;
     data['movieId'] = this.movieId;
-    data['rating'] = this.rating;
-    data['title'] = this.title;
     return data;
   }
 }

@@ -183,6 +183,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 movieId
                 rating
                 title
+                userReviewerId
               }
             }
           }
